@@ -1,7 +1,10 @@
 from room import Room
+from player import Player
+
 
 # Declare all the rooms
 
+#room class will now be imported with correct args & methods for initialization of instances
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons"),
@@ -36,6 +39,35 @@ room['treasure'].s_to = room['narrow']
 #
 # Main
 #
+def main(player):
+    while True:
+        valid_directions = ['n','s','e','w','q']
+        print('\n' '\n' +"Your Current Room is: " + player.room.name + '\n' '\n' +  "Room Description: " + player.room.description + '\n' '\n')
+        
+        player_input = input("Choose a direction: n,s,e,w or 'q' for quit --->")
+
+        try:
+            if player_input in valid_directions and player_input != 'q':
+                
+                #using getattr instead of multiple if conditions. This allows us to call an attribute dynamically with a string value
+                if getattr(player.room, player_input + '_to') is None:
+                   print('\n' '\n' + "**** DEAD END TRY AGAIN ****")
+                else:
+                    player.room = getattr(player.room, player_input + '_to')
+                
+                    
+                
+
+            else:
+                print('\n' '\n' +" ** QUIT GAME**")
+                break
+        
+        except:
+            print("** Unexpected Error **")
+
+
+main(Player("Dustin",room['outside']))
+
 
 # Make a new player object that is currently in the 'outside' room.
 
