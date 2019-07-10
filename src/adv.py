@@ -58,8 +58,11 @@ def main(player):
                     
                 
 
-            else:
-                print('\n' '\n' +" ** QUIT GAME**")
+            elif  player_input not in valid_directions:
+                print('\n' '\n' +" ** NOT a direction. Expectd : n,s,e,w or 'q' for quit **")
+                
+            elif player_input == 'q':
+                print("*** QUIT GAME ***")
                 break
         
         except:
