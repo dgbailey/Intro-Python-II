@@ -1,7 +1,11 @@
 from room import Room
 from player import Player
+from item import Item
+from input_parser import Parser
 
+# declare items
 
+item1 = Item("cleaver","A powerful tool for cutting meat")
 # Declare all the rooms
 
 #room class will now be imported with correct args & methods for initialization of instances
@@ -24,7 +28,9 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
+#link items to room
 
+room['outside'].add_item(item1)
 # Link rooms together
 
 room['outside'].n_to = room['foyer']
@@ -40,33 +46,35 @@ room['treasure'].s_to = room['narrow']
 # Main
 #
 def main(player):
+
+    response_parser = Parser()
+
     while True:
-        valid_directions = ['n','s','e','w','q']
-        print('\n' '\n' +"Your Current Room is: " + player.room.name + '\n' '\n' +  "Room Description: " + player.room.description + '\n' '\n')
-        
+       
+        print('\n' '\n' +"Your Current Room is: " + player.room.name + '\n' '\n' +  
+                "Room Description: " + player.room.description + '\n' '\n' + 
+                "Room Items: " + player.room.enumerate_items() + '\n'
+                    + 
+                f"Inventory Items: " + player.enumerate_inventory() + '\n')
         player_input = input("Choose a direction: n,s,e,w or 'q' for quit --->")
 
-        try:
-            if player_input in valid_directions and player_input != 'q':
-                
-                #using getattr instead of multiple if conditions. This allows us to call an attribute dynamically with a string value
-                if getattr(player.room, player_input + '_to') is None:
-                   print('\n' '\n' + "**** DEAD END TRY AGAIN ****")
-                else:
-                    player.room = getattr(player.room, player_input + '_to')
-                
-                    
-                
+        #parser returns boolean False with error message
+        #OR parser returns boolean true with success message
+        boolean, parser_response = response_parser.parse_player_input(player_input,player)
 
-            elif  player_input not in valid_directions:
-                print('\n' '\n' +" ** NOT a direction. Expectd : n,s,e,w or 'q' for quit **")
-                
-            elif player_input == 'q':
-                print("*** QUIT GAME ***")
-                break
+        if boolean is False:
+            print(parser_response)
+            break
         
-        except:
-            print("** Unexpected Error **")
+        else:
+            print(parser_response)
+            
+
+
+       
+        
+    
+        
 
 
 main(Player("Dustin",room['outside']))
