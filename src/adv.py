@@ -56,6 +56,8 @@ def main(player):
                 "Room Items: " + player.room.enumerate_items() + '\n'
                     + 
                 f"Inventory Items: " + player.enumerate_inventory() + '\n')
+
+                    
         player_input = input("Choose a direction: n,s,e,w or 'q' for quit --->")
 
         #parser returns boolean False with error message
